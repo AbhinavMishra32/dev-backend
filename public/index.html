@@ -7,9 +7,10 @@
 </head>
 <body>
 <script>
-    navigator.geolocation.getCurrentPosition(function(position) {
-        console.log("Latitude is :", position.coords.latitude);
-        console.log("Longitude is :", position.coords.longitude);
+    function buttonClick(){
+        navigator.geolocation.getCurrentPosition(async function(position) {
+        // console.log("Latitude is :", position.coords.latitude);
+        // console.log("Longitude is :", position.coords.longitude);
 
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
@@ -27,28 +28,21 @@
             },
             body: JSON.stringify(data)
         }
-        fetch('/api', options)
-    
+        const response = await fetch('/api', options);
+        const json = await response.json();
+        console.log(json);  
     } );
-    const myString = {accessed:'abhinav accessed website'}
-
-    // fetch('/api', {
-    //     method: 'POST', 
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(myString)
-    // })
-
-
+        }
 </script>
 
-    <h1>Show your location: 
+    <h1>Know your location: 
         <br>
         Latitude: <span id= 'lat'></span>
         <br>
         Longitude: <span id = 'lon'></span>
     </h1>
+
+    <button id = 'show' onclick="buttonClick();">Show location</button>
 
 </body>
 </html>
