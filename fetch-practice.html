@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js'></script>
+</head>
+<body>
+    <canvas id = 'chart' width = '400', height = '400'></canvas>
+    <img src="" id = 'image-container'>
+    <script>
+        async function fetchFunc(){
+            const img = await fetch('myimage.png');
+            const blobResult = await img.blob();
+            document.getElementById('image-container').src = URL.createObjectURL(blobResult);
+        }
+
+        fetchFunc();
+
+        getData();
+
+        async function getData(){
+            const myData = await fetch('data.csv');
+            const text = await myData.text();
+            // console.log(text);
+            const table = text.split('\n').splice(1)
+            // console.log(rows)
+            table.forEach(row => {
+                const col = row.split(',');
+                const year = col[0];
+                const temp = col[1];
+                console.log(year, temp);
+            })
+            // console.log(rows);
+        }
+    </script>
+</body>
+</html>
