@@ -4,11 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js" integrity="sha512-uaz5GpnQoE6t5echKlX8P52czvsIGgLPcvlzfvRubLZ1Hp8JemUDnbUiAahbVtPb+jUVrNETuXvAhDDF/N3M4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
+  <input type="text" placeholder="Enter word" id="word-input">
+  <button id = 'show' >Upload to database</button>
   <script>
-    getDate();
-    async function getDate(){
+        
+    function setup(){
+      noCanvas();
+      const video = createCapture(VIDEO);
+      video.size(320, 420);
+
+
+
+      navigator.geolocation.getCurrentPosition(async function(position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const word = document.getElementById('word-input').value;
+        video.loadPixels();
+        const image64 = video.canvas.toDataURL();
+        const data = {lat, lon, word, image64};
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        }
+        const response = await fetch('/api', options);
+        const json = await response.json();
+        console.log(json);
+    } );
+      getDate();
+      async function getDate(){
       const response = await fetch('/api');
       const data = await response.json();
 
@@ -29,35 +59,12 @@
       }
       console.log(data);
     }
-    function buttonClick(){
-        navigator.geolocation.getCurrentPosition(async function(position) {
-        // console.log("Latitude is :", position.coords.latitude);
-        // console.log("Longitude is :", position.coords.longitude);
-
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-        const word = document.getElementById('word-input').value;
-
-        // document.getElementById('lat').textContent = position.coords.latitude;
-        // document.getElementById('lon').textContent = position.coords.longitude;
     
-        const data = {lat, lon, word};
 
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        }
-        const response = await fetch('/api', options);
-        const json = await response.json();
-        console.log(json);
-    } );
-        }
-        
+
+  }
+  document.getElementById('show').addEventListener('click', setup);
   </script>
-  <input type="text" placeholder="Enter word" id="word-input">
-<button id = 'show' onclick="buttonClick();">Upload to database</button>
+
 </body>
 </html>
