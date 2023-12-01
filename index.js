@@ -10,23 +10,18 @@ app.use(express.static('public'));
 
 const myDatabase = new Datastore('database.db');
 myDatabase.loadDatabase();
-myDatabase.insert('abhinav mishra database hello');
-myDatabase.insert({abhinav: 'yes'})
-
 
 app.post('/api', (request, response) => {
     console.log('I got a request!')
     console.log(request.body);
 
-    databaseArray.push(request.body);
+    myDatabase.insert(request.body);
 
     response.json({
         status: 'success',
         latitude: request.body.lat, 
         longitude: request.body.lon,
-        database: databaseArray,
-        length: databaseArray.length
     })
 
-    console.log(databaseArray)
+    console.log(myDatabase)
 })
