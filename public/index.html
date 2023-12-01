@@ -14,23 +14,23 @@
 
         const lat = position.coords.latitude;
         const lon = position.coords.longitude;
-
+        const word = document.getElementById('word-input').value;
 
         document.getElementById('lat').textContent = position.coords.latitude;
         document.getElementById('lon').textContent = position.coords.longitude;
     
-        const data = {lat, lon};
-    
+        const data = {lat, lon, word};
+
         const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         }
         const response = await fetch('/api', options);
         const json = await response.json();
-        console.log(json);  
+        console.log(json);
     } );
         }
 </script>
@@ -41,8 +41,9 @@
         <br>
         Longitude: <span id = 'lon'></span>
     </h1>
-
-    <button id = 'show' onclick="buttonClick();">Show location</button>
+    <br>
+    <input type="text" placeholder="Enter word" id="word-input">
+    <button id = 'show' onclick="buttonClick();">Upload to database</button>
 
 </body>
 </html>

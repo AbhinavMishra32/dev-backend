@@ -11,6 +11,17 @@ app.use(express.static('public'));
 const myDatabase = new Datastore('database.db');
 myDatabase.loadDatabase();
 
+app.get('/api', (request, response) => {
+    myDatabase.find({}, (err, data) =>{
+        if(err){
+            response.end();
+            return;
+        }
+        response.json(data);
+    })
+    
+})
+
 app.post('/api', (request, response) => {
     console.log('I got a request!')
     const data = request.body;
@@ -19,12 +30,8 @@ app.post('/api', (request, response) => {
 
     myDatabase.insert(data);
     console.log(myDatabase);
-    response.json({
-        status: 'success',
-        timestamp: timestamp,
-        latitude: data.lat, 
-        longitude: data.lon
-    })
+    response.json(data);
 
     console.log(myDatabase)
+    console.log("Word: " + request.word)
 })

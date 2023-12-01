@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    getDate();
+    async function getDate(){
+      const response = await fetch('/api');
+      const data = await response.json();
+
+      for (item of data){
+        const root = document.createElement('p');
+        const word = document.createElement('div');
+        const geo = document.createElement('div');
+        const date = document.createElement('div');
+
+        word.textContent = `word: ${item.word}`;
+        geo.textContent = `geo: ${item.lat}°, ${item.lon}°`;
+        const dateString = new Date(item.timestamp).toLocaleString();
+        date.textContent = dateString;
+
+        root.appendChild(word, geo, date);
+        document.body.appendChild(root);
+
+      }
+      console.log(data);
+    }
+    function buttonClick(){
+        navigator.geolocation.getCurrentPosition(async function(position) {
+        // console.log("Latitude is :", position.coords.latitude);
+        // console.log("Longitude is :", position.coords.longitude);
+
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const word = document.getElementById('word-input').value;
+
+        // document.getElementById('lat').textContent = position.coords.latitude;
+        // document.getElementById('lon').textContent = position.coords.longitude;
+    
+        const data = {lat, lon, word};
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        }
+        const response = await fetch('/api', options);
+        const json = await response.json();
+        console.log(json);
+    } );
+        }
+        
+  </script>
+  <input type="text" placeholder="Enter word" id="word-input">
+<button id = 'show' onclick="buttonClick();">Upload to database</button>
+</body>
+</html>
