@@ -13,14 +13,17 @@ myDatabase.loadDatabase();
 
 app.post('/api', (request, response) => {
     console.log('I got a request!')
-    console.log(request.body);
+    const data = request.body;
+    const timestamp = Date.now();
+    data.timestamp = timestamp;
 
-    myDatabase.insert(request.body);
-
+    myDatabase.insert(data);
+    console.log(myDatabase);
     response.json({
         status: 'success',
-        latitude: request.body.lat, 
-        longitude: request.body.lon,
+        timestamp: timestamp,
+        latitude: data.lat, 
+        longitude: data.lon
     })
 
     console.log(myDatabase)
