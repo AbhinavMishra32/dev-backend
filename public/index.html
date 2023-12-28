@@ -6,6 +6,8 @@
   <title>Document</title>
 </head>
 <body>
+    <button id = "catfact-bt">Show cat fact</button>
+    <p>Cat fact: <span id= 'catfact-p'></span></p>
 <script>
     function buttonClick(){
         navigator.geolocation.getCurrentPosition(async function(position) {
@@ -34,7 +36,14 @@
     } );
         }
 
+        async function catfactFunc(){
+            const response = await fetch('https://catfact.ninja/fact');
+            const json = await response.json();
 
+            document.getElementById('catfact-p').innerHTML = json.fact;
+        }
+
+        document.getElementById('catfact-bt').addEventListener('click', catfactFunc);
 
 </script>
 
